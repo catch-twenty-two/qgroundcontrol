@@ -1246,9 +1246,7 @@ void Vehicle::_parametersReady(bool parametersReady)
     }
 
     if (parametersReady) {
-        qWarning("setting joystick enabled %d", _joystickEnabled);
-
-        setJoystickEnabled(true);
+        setJoystickEnabled(_joystickEnabled);
     }
 }
 
