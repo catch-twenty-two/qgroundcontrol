@@ -30,40 +30,6 @@
 
 #include "QGCConfig.h"
 
-
-/* Windows fixes */
-#ifdef _MSC_VER
-#if (_MSC_VER < 1800)	/* only PRIOR to Visual Studio 2013 */
-/* Needed define for Eigen */
-//#define NOMINMAX
-#include <limits>
-template<typename T>
-inline bool isnan(T value)
-{
-	return value != value;
-
-}
-
-// requires #include <limits>
-template<typename T>
-inline bool isinf(T value)
-{
-	return (value == std::numeric_limits<T>::infinity() || (-1 * value) == std::numeric_limits<T>::infinity()) && std::numeric_limits<T>::has_infinity;
-}
-#endif
-#elif defined __APPLE__
-#include <cmath>
-#ifndef isnan
-#define isnan(x) std::isnan(x)
-#endif
-#ifndef isinf
-#define isinf(x) std::isinf(x)
-#endif
-#endif
-#ifdef __android__
-#define isinf(x) std::isinf(x)
-#endif
-
 namespace QGC
 {
 const static int defaultSystemId = 255;
@@ -102,27 +68,9 @@ const static int MAX_FLIGHT_TIME = 60 * 60 * 24 * 21;
 class SLEEP : public QThread
 {
 public:
-    /**
-     * @brief Set a thread to sleep for seconds
-     * @param s time in seconds to sleep
-     **/
-    static void sleep(unsigned long s) {
-        QThread::sleep(s);
-    }
-    /**
-     * @brief Set a thread to sleep for milliseconds
-     * @param ms time in milliseconds to sleep
-     **/
-    static void msleep(unsigned long ms) {
-        QThread::msleep(ms);
-    }
-    /**
-     * @brief Set a thread to sleep for microseconds
-     * @param us time in microseconds to sleep
-     **/
-    static void usleep(unsigned long us) {
-        QThread::usleep(us);
-    }
+    using QThread::sleep;
+    using QThread::msleep;
+    using QThread::usleep;
 };
 
 quint32 crc32(const quint8 *src, unsigned len, unsigned state);
